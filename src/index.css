@@ -148,11 +148,14 @@
 .post-caption-row{padding-bottom:16px;border-bottom:1px solid #efefef}
 
 /* Keep post interactions visible while only the comments list scrolls. */
-.post-detail-side{height:100%;min-height:0;overflow:hidden}
-.post-detail-side>header{flex:0 0 64px;min-height:64px}
-.post-detail-side>.comment-list{flex:1 1 auto;min-height:0;overflow-y:auto}
-.post-detail-side>.post-detail-actions{flex:0 0 86px;height:86px;min-height:86px;background:#fff}
-.post-detail-side>form.comment-form{flex:0 0 54px;height:54px;min-height:54px;background:#fff}
+.post-detail{grid-template-rows:minmax(0,1fr)}
+.post-detail-media{min-height:0;overflow:hidden}
+.post-detail-side{display:grid;grid-template-rows:64px minmax(0,1fr) 86px 54px;height:auto;min-height:0;align-self:stretch;overflow:hidden}
+.post-detail-side>header{height:auto;min-height:0}
+.post-detail-side>.comment-list{min-height:0;overflow-y:auto}
+.post-detail-side>.post-detail-actions{height:auto;min-height:0;background:#fff}
+.post-detail-side>form.comment-form{height:auto;min-height:0;background:#fff}
+@media(max-width:700px){.post-detail{grid-template-rows:minmax(0,55%) minmax(0,45%)}}
 
 /* Notifications are actionable and identify likes/comments without post thumbnails. */
 .notification-item{border-radius:8px;padding-left:8px;padding-right:8px}
