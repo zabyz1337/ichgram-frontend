@@ -147,6 +147,13 @@
 .comment-row p{min-width:0}
 .post-caption-row{padding-bottom:16px;border-bottom:1px solid #efefef}
 
+/* Keep post interactions visible while only the comments list scrolls. */
+.post-detail-side{height:100%;min-height:0;overflow:hidden}
+.post-detail-side>header{flex:0 0 64px;min-height:64px}
+.post-detail-side>.comment-list{flex:1 1 auto;min-height:0;overflow-y:auto}
+.post-detail-side>.post-detail-actions{flex:0 0 86px;height:86px;min-height:86px;background:#fff}
+.post-detail-side>form.comment-form{flex:0 0 54px;height:54px;min-height:54px;background:#fff}
+
 /* Notifications are actionable and identify likes/comments without post thumbnails. */
 .notification-item{border-radius:8px;padding-left:8px;padding-right:8px}
 .notification-item:hover{background:#fafafa}
