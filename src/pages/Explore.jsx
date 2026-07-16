@@ -12,7 +12,12 @@ export default function Explore() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    api.get("/explore").then(({ data }) => setPosts(data)).catch((err) => setError(err.response?.data?.message || "Could not load explore")).finally(() => setLoading(false));
+    let ignore = false;
+    api.get("/explore")
+      .then(({ data }) => { if (!ignore) setPosts(data); })
+      .catch((err) => { if (!ignore) setError(err.response?.data?.message || "Could not load explore"); })
+      .finally(() => { if (!ignore) setLoading(false); });
+    return () => { ignore = true; };
   }, []);
 
   if (loading) return <div className="page-loading">Exploring...</div>;

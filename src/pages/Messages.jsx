@@ -8,6 +8,7 @@ export default function Messages() {
   const end = useRef(null);
   const [me, setMe] = useState(null);
   const [users, setUsers] = useState([]);
+  const [conversations, setConversations] = useState([]);
   const [active, setActive] = useState(null);
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
@@ -31,6 +32,7 @@ export default function Messages() {
           const conversations = (await api.get("/messages")).data;
           const found = conversations.map(({ user, lastMessage }) => ({ ...user, lastMessage }));
           if (ignore) return;
+          setConversations(found);
           setUsers(found);
           setActive(found[0] || null);
         }
@@ -56,11 +58,16 @@ export default function Messages() {
     const value = event.target.value;
     setQuery(value);
     if (!value.trim()) {
-      setUsers([]);
+      setUsers(conversations);
       return;
     }
-    const data = (await api.get(`/users/search?q=${encodeURIComponent(value)}`)).data.filter((item) => !isSameId(item, me?._id));
-    setUsers(data);
+    try {
+      const data = (await api.get(`/users/search?q=${encodeURIComponent(value)}`)).data.filter((item) => !isSameId(item, me?._id));
+      setUsers(data);
+      setError("");
+    } catch (err) {
+      setError(err.response?.data?.message || "Could not search users");
+    }
   };
 
   const send = async (event) => {

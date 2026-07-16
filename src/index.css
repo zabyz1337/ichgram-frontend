@@ -155,3 +155,9 @@
 .notification-kind.follow{border:2px solid #111;border-radius:50%;color:#111;font-weight:700}
 .notification-kind.follow::before{content:"+";font-size:24px;line-height:1}
 .notification-kind.follow .action-icon{display:none}
+
+/* Match the supplied Figma logo frame exactly. */
+.sidebar-logo{width:97px!important;height:54.56px!important;margin:0 4px 18px!important}
+.sidebar-logo img{width:97px!important;height:54.56px!important;max-height:none!important;object-fit:contain}
+.recent-title{font-size:16px;margin:24px 0 8px}
+@media(max-width:1000px){.sidebar-logo{width:42px!important;overflow:hidden}.sidebar-logo img{width:97px!important;max-width:none!important}}

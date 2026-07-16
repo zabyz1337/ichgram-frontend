@@ -3,15 +3,15 @@ import { useNavigate } from "react-router-dom";
 
 const ref = (name) => `/reference/webdev/${name}`;
 const interestItems = [
-  ["explore-car.png", "Inside a quiet evening drive"],
-  ["explore-camper.png", "Coffee by the sea"],
-  ["explore-city.png", "City window at dusk"],
-  ["explore-road.png", "Long road through the hills"],
-  ["explore-dinner.png", "Friends around the table"],
-  ["explore-work.png", "Studio workday"],
-  ["explore-dog.png", "Morning walk"],
-  ["explore-mountain.png", "Green mountain trail"],
-  ["explore-laptop.png", "Desk notes"],
+  ["explore-car.jpg", "Inside a quiet evening drive"],
+  ["explore-camper.jpg", "Coffee by the sea"],
+  ["explore-city.jpg", "City window at dusk"],
+  ["explore-road.jpg", "Long road through the hills"],
+  ["explore-dinner.jpg", "Friends around the table"],
+  ["explore-work.jpg", "Studio workday"],
+  ["explore-dog.jpg", "Morning walk"],
+  ["explore-mountain.jpg", "Green mountain trail"],
+  ["explore-laptop.jpg", "Desk notes"],
 ].map(([image, text], index) => ({ id: `interest-${index + 1}`, image: ref(image), text }));
 
 export default function Interest() {

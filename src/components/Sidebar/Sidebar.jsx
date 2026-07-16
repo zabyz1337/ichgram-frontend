@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import api from "../../api/axios";
-import { avatarFallback, timeAgo } from "../../utils/helpers";
+import { avatarFallback, getRecentProfileIds, rememberProfile, timeAgo } from "../../utils/helpers";
 import homeIcon from "../../assets/icons/home.svg";
 import searchIcon from "../../assets/icons/search.svg";
 import exploreIcon from "../../assets/icons/explore.svg";
@@ -16,6 +16,7 @@ export default function Sidebar() {
   const [me, setMe] = useState(null);
   const [query, setQuery] = useState("");
   const [users, setUsers] = useState([]);
+  const [recentUsers, setRecentUsers] = useState([]);
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
@@ -24,6 +25,10 @@ export default function Sidebar() {
 
   useEffect(() => {
     if (panel !== "search") return undefined;
+    if (!query.trim()) {
+      Promise.all(getRecentProfileIds().map((id) => api.get(`/users/${id}`).then(({ data }) => data).catch(() => null)))
+        .then((items) => setRecentUsers(items.filter(Boolean)));
+    }
     const timer = setTimeout(async () => {
       if (!query.trim()) {
         setUsers([]);
@@ -73,16 +78,16 @@ export default function Sidebar() {
         <div className="search-control"><input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" />{query && <button onClick={() => setQuery("")}>{"\u00d7"}</button>}</div>
         <h3>{query ? "Results" : "Recent"}</h3>
         <div className="panel-list">
-          {!query && <p className="empty-copy">Start typing a name or username.</p>}
+          {!query && !recentUsers.length && <p className="empty-copy">Profiles you visit will appear here.</p>}
           {query && !users.length && <p className="empty-copy">No users found.</p>}
-          {users.map((user) => <Link key={user._id} to={`/profile/${user._id}`} className="panel-user"><img src={user.avatar || avatarFallback} alt="" /><span><b>{user.username}</b><small>{user.fullName}</small></span></Link>)}
+          {(query ? users : recentUsers).map((user) => <Link onClick={() => rememberProfile(user._id)} key={user._id} to={`/profile/${user._id}`} className="panel-user"><img src={user.avatar || avatarFallback} alt="" /><span><b>{user.username}</b><small>{user.fullName}</small></span></Link>)}
         </div>
       </>}
       {panel === "notifications" && <>
         <h2>Notifications</h2><h3>New</h3>
         <div className="panel-list">
           {!notifications.length && <p className="empty-copy">No notifications yet.</p>}
-          {notifications.map((item) => <Link to={item.post?._id ? `/post/${item.post._id}` : `/profile/${item.sender?._id}`} key={item._id} className="notification-row">
+          {notifications.map((item) => <Link to={`/profile/${item.sender?._id}`} key={item._id} className="notification-row">
             <img src={item.sender?.avatar || avatarFallback} alt="" />
             <span><b>{item.sender?.username || "User"}</b> {item.type === "like" ? "liked your photo." : item.type === "comment" ? "commented on your photo." : "started following you."}<small>{timeAgo(item.createdAt)}</small></span>
             {item.post?.image && <img className="notification-thumb" src={item.post.image} alt="" />}

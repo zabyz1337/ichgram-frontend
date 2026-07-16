@@ -37,3 +37,20 @@ export async function fileToDataUrl(file) {
     reader.readAsDataURL(file);
   });
 }
+
+const RECENT_PROFILES_KEY = "ichgram_recent_profiles";
+
+export function rememberProfile(userId) {
+  if (!userId) return;
+  const current = JSON.parse(localStorage.getItem(RECENT_PROFILES_KEY) || "[]");
+  const next = [String(userId), ...current.filter((id) => String(id) !== String(userId))].slice(0, 8);
+  localStorage.setItem(RECENT_PROFILES_KEY, JSON.stringify(next));
+}
+
+export function getRecentProfileIds() {
+  try {
+    return JSON.parse(localStorage.getItem(RECENT_PROFILES_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}

@@ -32,17 +32,18 @@ export default function Notifications() {
         {notifications.map((item) => {
           const user = item.sender || item.from || item.user;
 
-          const href = item.post?._id ? `/post/${item.post._id}` : `/profile/${user?._id}`;
-          return <Link className="notification-item" to={href} key={item._id}>
-            <img src={user?.avatar || profileIcon} alt="" className="notification-avatar" />
+          const profileHref = `/profile/${user?._id}`;
+          const actionHref = item.post?._id ? `/post/${item.post._id}` : profileHref;
+          return <div className="notification-item" key={item._id}>
+            <Link to={profileHref}><img src={user?.avatar || profileIcon} alt="" className="notification-avatar" /></Link>
             <p>
-              <strong>{user?.username || "User"}</strong>{" "}
+              <Link to={profileHref}><strong>{user?.username || "User"}</strong></Link>{" "}
               {notificationText[item.type] || "sent you a notification."}
             </p>
-            <span className={`notification-kind ${item.type}`} aria-label={item.type}>
+            <Link to={actionHref} className={`notification-kind ${item.type}`} aria-label={item.type}>
               <i className={`action-icon ${item.type === "comment" ? "comment-action" : "like-action"}`} />
-            </span>
-          </Link>;
+            </Link>
+          </div>;
         })}
         {notifications.length === 0 && <div className="notifications-empty">
           <h2>No notifications yet</h2>

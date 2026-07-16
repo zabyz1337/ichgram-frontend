@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../api/axios";
-import { avatarFallback, isSameId } from "../utils/helpers";
+import { avatarFallback, isSameId, rememberProfile } from "../utils/helpers";
 
 function GridStats({ post }) {
   return <span className="grid-stats"><i className="action-icon like-action" /> {post.likes?.length || 0} <i className="action-icon comment-action" /> {post.comments?.length || 0}</span>;
@@ -38,6 +38,7 @@ export default function OtherProfile() {
         setMe(a.data);
         setUser(b.data);
         setPosts(c.data);
+        rememberProfile(b.data._id);
       } catch (err) {
         if (!ignore) setError(err.response?.data?.message || "Could not load profile");
       }
